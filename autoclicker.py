@@ -1,8 +1,8 @@
-import threading, time
+import random, threading, time
 from pynput.mouse import Button, Controller as MouseController
 from pynput.keyboard import GlobalHotKeys, Key, Controller as KeyboardController
 
-CLICK_DELAY = 90     # seconds before each click (1 min 30 sec)
+CLICK_DELAYS = [50, 60, 70, 80, 90]  # seconds; one is picked at random before each click
 COUNTDOWN_STEP = 10  # print how long is left every this many seconds
 ENTER_DELAY = 1      # seconds after the click before Enter
 BUTTON = Button.left
@@ -29,8 +29,9 @@ def wait(seconds, countdown=False):
 def worker():
     while True:
         if running:
-            print(f"Waiting {CLICK_DELAY} seconds before clicking...", flush=True)
-            if not wait(CLICK_DELAY, countdown=True):
+            delay = random.choice(CLICK_DELAYS)
+            print(f"Waiting {delay} seconds before clicking...", flush=True)
+            if not wait(delay, countdown=True):
                 continue
             mouse.click(BUTTON)
             print("Clicked", flush=True)
